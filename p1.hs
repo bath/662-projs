@@ -40,7 +40,13 @@ evalS (Minus l r) = do {(Num l') <- evalS l;
 evalS (Bind s a b) = do {a' <- eval a;
                          (eval (subst s a' b))}
 evalS (Id a) = Nothing
-evalS (Boolean b) = 
+evalS (Boolean b) = Just (Bool b)
+evalS (And l r) = do {(Bool l') <- eval l;
+                      (Bool r') <- eval r;
+                      eval (Bool (l' && r'))}
+evalS (Leq l r) = do {(Num l') <- eval l;
+                      (Num r') <- eval r;
+                      eval (Bool (l' <= r'))}
 evalS _ = Nothing
 
 
